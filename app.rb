@@ -1,6 +1,8 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'sqlite3'
+require 'sinatra/activerecord'
+require './models/user.rb'
 
 get '/' do
   "hello world!"
@@ -35,6 +37,20 @@ post '/users' do
   stmt.execute
 
   redirect to('/users')
+end
+
+get '/ar/users' do
+  @users = User.all
+  erb :'ar/users/index'
+end
+
+post '/ar/users' do
+  User.create(name: params[:name])
+  redirect to('/ar/users')
+end
+
+get '/ar/users/new' do
+  erb :'ar/users/new'
 end
 
 def link_to(text, url)
